@@ -30,4 +30,4 @@ jobs:
         with:
           app-name: "angularAzureDemo"
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          package: "dist/YOUR_ANGULAR_APP"
+          package: "dist/angularAzureDemo"
