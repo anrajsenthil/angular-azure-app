@@ -1,0 +1,39 @@
+name: Deploy Angular App to Azure c
+
+on:
+  push:
+    branches:
+      - main  # Change to your branch if needed
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Angular App
+        run: npm run build -- --configuration=production --output-path=dist/angular-azure-app
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+
+      - name: Deploy to Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "angularAzureDemo"
+          publish-profile: ${{ secrets.AZURE_ANGULAR_PUBLISH_PROFILE }}
+          package: "${{ github.workspace }}/dist/angular-azure-app"
